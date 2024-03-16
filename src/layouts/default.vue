@@ -34,34 +34,36 @@
           target="_blank"
         />
         <q-separator class="q-my-md q-mr-md" vertical />
-        <q-btn unelevated rounded color="primary" label="로그인 / 회원가입" />
+        <q-btn
+          unelevated
+          rounded
+          color="primary"
+          label="로그인 / 회원가입"
+          @click="openAuthDialog"
+        />
       </q-toolbar>
     </q-header>
-    <q-page-container class="bg-grey-3">
+    <q-page-container :style="pageContainerStyles" class="bg-grey-3">
       <router-view />
     </q-page-container>
+    <AuthDialog v-model="authDialog" />
   </q-layout>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script setup>
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-export default {
-  setup() {
-    const leftDrawerOpen = ref(false);
-    const rightDrawerOpen = ref(false);
+import AuthDialog from 'src/components/auth/AuthDialog.vue';
 
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
+const route = useRoute();
 
-      rightDrawerOpen,
-      toggleRightDrawer() {
-        rightDrawerOpen.value = !rightDrawerOpen.value;
-      },
-    };
-  },
-};
+const pageContainerStyles = computed(() => ({
+  maxWidth: route.meta?.width || '1080px',
+  margin: '0 auto',
+}));
+
+const authDialog = ref(true);
+const openAuthDialog = () => (authDialog.value = true);
 </script>
+<style lang="scss" scoped></style>
